@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
-  - Border
+  - Footer
+  - Fall
+  - Bullet
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - Board
+  - 
   - 
   - 
   - 

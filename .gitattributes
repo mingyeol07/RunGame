@@ -1,0 +1,13 @@
+APIUpdater filter=lfs diff=lfs merge=lfs -text
+Artifacts filter=lfs diff=lfs merge=lfs -text
+Bee filter=lfs diff=lfs merge=lfs -text
+BurstCache filter=lfs diff=lfs merge=lfs -text
+GridBrush filter=lfs diff=lfs merge=lfs -text
+PackageCache filter=lfs diff=lfs merge=lfs -text
+PackageManager filter=lfs diff=lfs merge=lfs -text
+ScriptAssemblies filter=lfs diff=lfs merge=lfs -text
+Search filter=lfs diff=lfs merge=lfs -text
+ShaderCache filter=lfs diff=lfs merge=lfs -text
+StateCache filter=lfs diff=lfs merge=lfs -text
+ filter=lfs diff=lfs merge=lfs -text
+TempArtifacts filter=lfs diff=lfs merge=lfs -text
