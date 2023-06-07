@@ -7,6 +7,10 @@ public class Bullet : MonoBehaviour
     public float destroyTime = 5;
     public float speed = 1f;
 
+    private void Start() {
+        Destroy(gameObject, 1f);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag == "Boss")
         {

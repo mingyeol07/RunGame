@@ -1,24 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
     public GameObject bullet;
+    public GameObject changeHp;
 
-    public int jumpPower = 1;
+    public int jumpPoint;
     public int maxJumpPoint = 1;
-    public int jumpPoint = 2;
-    public int hp;
 
-    public int maxAmmo = 10;
-    public int currentAmmo = 10;
-
+    public float jumpPower = 5;
     public float moveCool = 2;
 
     public bool isMoved;
     public bool isFalled;
     public bool isDamaged;
+    private bool isJumping = false;
+    private bool isReLoad = false;
 
     GameManager gameManager;
     Rigidbody2D rigid;
@@ -40,7 +41,6 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         Jump();
-        Slider();
         Fire();
         Move();
     }
@@ -69,43 +69,40 @@ public class PlayerMove : MonoBehaviour
     }
     void Fire()
     {
-        if (Input.GetKeyDown(KeyCode.X) && currentAmmo > 0)
+        if (Input.GetKeyDown(KeyCode.E) && gameManager.bullet > 0 && isReLoad == false && isJumping == false)
         {
             Instantiate(bullet, transform.position, Quaternion.identity);
-            currentAmmo--;
+            gameManager.bullet--;
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && isReLoad == false)
         {
             StartCoroutine(ReLoad());
         }
     }
-    private void Slider()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Debug.Log("Slide");
-        }
-    }
+
     void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (jumpPoint > 0)
             {
-                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+                rigid.velocity = new Vector2(rigid.velocity.x, jumpPower);
                 jumpPoint--;
+
             }
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Footer")
-        {
-            jumpPoint = maxJumpPoint;
-        }
         if (collision.gameObject.tag == "Fall" && !isDamaged)
         {
+            gameManager.playerHp -= 5f;
             StartCoroutine(Damaged());
+        }
+        if (collision.gameObject.CompareTag("Footer"))
+        {
+            jumpPoint = maxJumpPoint;
         }
     }
 
@@ -113,6 +110,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Boss" && !isDamaged)
         {
+            gameManager.playerHp -= 15f;
             StartCoroutine(Damaged());
         }
     }
@@ -120,23 +118,24 @@ public class PlayerMove : MonoBehaviour
     IEnumerator Damaged()
     {
         transform.position = gameManager.movePoint[gameManager.nowPosition - 1].position;
-        hp--;
 
         isDamaged = true;
         for (int i = 0; i < 3; i++)
         {
-            gameManager.NotFallPoint[i].SetActive(true);
+            gameManager.notFallPoint[i].SetActive(true);
         }
+        
         spriteRenderer.color = new Color(1, 1, 1, 0.4f);
-
+        changeHp.SetActive(true);
         yield return new WaitForSeconds(2f);
 
         isDamaged = false;
         for (int j = 0; j < 3; j++)
         {
-            gameManager.NotFallPoint[j].SetActive(false);
+            gameManager.notFallPoint[j].SetActive(false);
         }
         spriteRenderer.color = new Color(1, 1, 1, 1);
+        changeHp.SetActive(false);
     }
 
     IEnumerator MoveCool()
@@ -148,7 +147,11 @@ public class PlayerMove : MonoBehaviour
 
     IEnumerator ReLoad()
     {
+        Debug.Log("재장전 중..");
+        isReLoad = true;
         yield return new WaitForSeconds(2f);
-        currentAmmo = maxAmmo;
+        isReLoad = false;
+        Debug.Log("재장전 완료");
+        gameManager.bullet = gameManager.bulletMax;
     }
 }

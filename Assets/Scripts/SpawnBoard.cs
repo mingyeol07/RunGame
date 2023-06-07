@@ -21,20 +21,20 @@ public class SpawnBoard : MonoBehaviour
         gameManager = GameManager.instance;
     }
 
-    IEnumerator RandomSpawner() //  함수 이름 바꿔라.
+    IEnumerator RandomSpawner()
     {
         randomSpawn = Random.Range(0, 10);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.4f);
 
         if (randomSpawn >= 0 && randomSpawn < 2)
         {
             Instantiate(gameManager.board[0], transform.position, Quaternion.identity);
         }
-        if (randomSpawn >= 2 && randomSpawn < 5)
+        if (randomSpawn >= 2 && randomSpawn < 4)
         {
             Instantiate(gameManager.board[1], transform.position, Quaternion.identity);
         }
-        if (randomSpawn >= 5 && randomSpawn < 10)
+        if (randomSpawn >= 4 && randomSpawn < 10)
         {
             Instantiate(gameManager.board[2], transform.position, Quaternion.identity);
         }
