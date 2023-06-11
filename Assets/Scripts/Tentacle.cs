@@ -43,9 +43,6 @@ public class Tentacle : MonoBehaviour
             gameManager.tentacleHp3--;
         }
 
-        if (gameManager.tentacleHp1 <= 0 || gameManager.tentacleHp2 <= 0 || gameManager.tentacleHp3 <= 0)
-        {
-            anim.SetBool("Die", true);
-        }
+        
     }
 }

@@ -28,6 +28,8 @@ public class BossPhase2 : MonoBehaviour
     }
 
     private void Update() {
+        
+
         if (isMove1)
         {
         Vector3 targetPosition = new Vector3(transform.position.x, gameManager.movePoint[0].transform.position.y, transform.position.z);
