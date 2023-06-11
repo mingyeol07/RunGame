@@ -8,6 +8,7 @@ TagManager:
   - Fall
   - Bullet
   - Boss
+  - Beam
   layers:
   - Default
   - TransparentFX

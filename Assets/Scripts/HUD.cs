@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    public enum InfoType { PlayerHp, Bullet, BossHp, TentacleHp1, TentacleHp2, TentacleHp3 }
+    public enum InfoType { Skill, PlayerHp, Bullet, BossHp, TentacleHp1, TentacleHp2, TentacleHp3, SkillCool }
     public InfoType type;
 
     GameManager gameManager;
@@ -22,6 +22,9 @@ public class HUD : MonoBehaviour
     private void Update() {
         switch (type)
         {
+            case InfoType.Skill:
+                mySlider.value = gameManager.skillCool / gameManager.skillMaxCool;
+                break;
             case InfoType.PlayerHp:
                 mySlider.value = gameManager.playerHp / gameManager.playerMaxHp;
                 break;
@@ -32,13 +35,16 @@ public class HUD : MonoBehaviour
                 mySlider.value = gameManager.bossHp / gameManager.bossMaxHp;
                 break;
             case InfoType.TentacleHp1:
-                mySlider.value = gameManager.tentacleHp1 / gameManager.tentacleMaxHp1;
+                mySlider.value = gameManager.tentacleHp1 / gameManager.tentacleMaxHp;
                 break;
             case InfoType.TentacleHp2:
-                mySlider.value = gameManager.tentacleHp2 / gameManager.tentacleMaxHp2;
+                mySlider.value = gameManager.tentacleHp2 / gameManager.tentacleMaxHp;
                 break;
             case InfoType.TentacleHp3:
-                mySlider.value = gameManager.tentacleHp3 / gameManager.tentacleMaxHp3;
+                mySlider.value = gameManager.tentacleHp3 / gameManager.tentacleMaxHp;
+                break;
+            case InfoType.SkillCool:
+                mySlider.value = gameManager.skillCool / gameManager.skillMaxCool;
                 break;
         }
     }

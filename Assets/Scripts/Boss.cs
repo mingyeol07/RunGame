@@ -6,7 +6,6 @@ public class Boss : MonoBehaviour
 {
     int ranAtt;
 
-    public float bossHp = 100;
     public float tentacleNextTime;
     public float tentacleBackTime;
     public float tentacleCoolTime;
@@ -28,11 +27,15 @@ public class Boss : MonoBehaviour
     GameManager gameManager;
     CapsuleCollider2D csCollider;
     SpriteRenderer spriteRenderer;
+    Rigidbody2D rigid;
+    Animator animator;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         csCollider = GetComponent<CapsuleCollider2D>();
+        rigid = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -44,21 +47,43 @@ public class Boss : MonoBehaviour
 
     private void Update()
     {
+        TentacleDead();
         tentacleMove();
         Phase();
+
+        if (gameManager.bossHp <= 0)
+        {
+            animator.SetBool("isDie", true);
+            gameObject.GetComponent<BossPhase2>().enabled = false;
+        }
     }
+
+    
+
+    void TentacleDead()
+    {
+        if (gameManager.tentacleHp1 <= 0 && gameManager.tentacleHp2 <= 0 && gameManager.tentacleHp3 <= 0)
+        {
+            Tentacle[0].SetActive(false);
+            Tentacle[1].SetActive(false);
+            Tentacle[2].SetActive(false);
+        }
+    }
+
 
     void Phase()
     {
         if (Tentacle[0].activeSelf == false && Tentacle[1].activeSelf == false && Tentacle[2].activeSelf == false)
         {
             csCollider.enabled = true;
+            animator.SetBool("isPhase2", true);
+            gameObject.GetComponent<BossPhase2>().enabled = true;
         }
-        if (bossHp <= 200)
+
+        if (gameManager.bossHp <= 0)
         {
-            
         }
-        
+
     }
 
     void tentacleMove()
@@ -88,7 +113,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator Damaged()
     {
-        bossHp -= 1f;
+        gameManager.bossHp--;
         spriteRenderer.color = new Color(1, 1, 1, 0.4f);
 
         yield return new WaitForSeconds(0.1f);
@@ -119,7 +144,6 @@ public class Boss : MonoBehaviour
                 StartCoroutine(TentacleAtt5());
                 break;
         }
-        
     }
 
     IEnumerator Tentacle1()
@@ -180,7 +204,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator TentacleAtt2()
     {
-        
+
         StartCoroutine(Tentacle3());
         yield return new WaitForSeconds(tentacleNextTime);
         StartCoroutine(Tentacle2());
@@ -192,7 +216,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator TentacleAtt3()
     {
-        
+
         StartCoroutine(Tentacle1());
         yield return new WaitForSeconds(tentacleNextTime);
         StartCoroutine(Tentacle2());
@@ -204,24 +228,24 @@ public class Boss : MonoBehaviour
 
     IEnumerator TentacleAtt4()
     {
-        
+
         StartCoroutine(Tentacle1());
-        yield return new WaitForSeconds(1f);
-        StartCoroutine(Tentacle2());
         yield return new WaitForSeconds(tentacleNextTime);
         StartCoroutine(Tentacle3());
+        yield return new WaitForSeconds(tentacleNextTime);
+        StartCoroutine(Tentacle2());
 
         StartCoroutine(Att());
     }
 
     IEnumerator TentacleAtt5()
     {
-        
+
         StartCoroutine(Tentacle3());
-        yield return new WaitForSeconds(1f);
-        StartCoroutine(Tentacle2());
         yield return new WaitForSeconds(tentacleNextTime);
         StartCoroutine(Tentacle1());
+        yield return new WaitForSeconds(tentacleNextTime);
+        StartCoroutine(Tentacle2());
 
         StartCoroutine(Att());
     }
